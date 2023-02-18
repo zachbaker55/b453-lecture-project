@@ -4,13 +4,6 @@ using UnityEngine;
 
 namespace BillionGame {
 
-    public enum Team {
-        red,
-        blue,
-        yellow,
-        green
-    }
-
     public class BillionBase : MonoBehaviour {
         
         public GameObject Billion;
