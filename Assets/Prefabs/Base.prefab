@@ -130,6 +130,8 @@ MonoBehaviour:
   baseYellow: {fileID: -1107013463, guid: 16c197198e302e34b8de97ad039b3377, type: 3}
   baseGreen: {fileID: 707806259, guid: 16c197198e302e34b8de97ad039b3377, type: 3}
   Team: 0
+  SpawnHealth: 10
   StartTime: 2
   SpawnTime: 2
   MaxBillions: 3
+  childBillions: []

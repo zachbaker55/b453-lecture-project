@@ -14,10 +14,11 @@ namespace BillionGame {
         [SerializeField] private Sprite baseGreen;
 
         public Team Team;
+        public int SpawnHealth = 10;
         public float StartTime;
         public float SpawnTime;
         public int MaxBillions;
-        private List<GameObject> childBillions = new List<GameObject>();
+        public List<GameObject> childBillions = new List<GameObject>();
 
         private void Awake() {
             srenderer = GetComponent<SpriteRenderer>();
@@ -45,7 +46,10 @@ namespace BillionGame {
             if (childBillions.Count < MaxBillions) {
                 GameObject billion = Instantiate(Billion, transform.position + new Vector3(1, 0, 0), Quaternion.identity);
                 billion.transform.parent = gameObject.transform;
-                billion.GetComponent<Billion>().Team = Team;
+                Billion billComp = billion.GetComponent<Billion>();
+                billComp.Team = Team;
+                billComp.maxHealth = SpawnHealth;
+                billComp.originBase = this;
                 childBillions.Add(billion);
             } 
         }

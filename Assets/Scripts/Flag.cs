@@ -20,7 +20,7 @@ namespace BillionGame {
         }
 
         private void Start() {
-             if (animator != null) {
+            if (animator != null) {
                 switch (Team) {
                     case Team.red:
                         animator.SetTrigger("setRed");
@@ -35,7 +35,7 @@ namespace BillionGame {
                         animator.SetTrigger("setGreen");
                     break;
                 }
-             }
+            }
         }
 
         private void Update() {
