@@ -16,10 +16,12 @@ namespace BillionGame {
         
         private GameObject target;
         private Vector3 oldTarget;
+        private Billion billionTarget;
 
         [HideInInspector] public BillionBase originBase;
         [HideInInspector] public int maxHealth;
         public int CurrentHealth {get; set;}
+        public Quaternion Facing {get; set;}
 
         [Range(0.0f, 10.0f)] public float walkSpeed;
         [Range(0.0f, 10.0f)] public float slowRange;
@@ -27,11 +29,13 @@ namespace BillionGame {
         private float deceleration = 1.0f;
         private bool isOver = false;
 
+        private static List<Billion> billionList = new List<Billion>(); 
 
         private void Awake() {
             healthTransform = this.transform.GetChild(0);
             healthSprite = healthTransform.GetComponent<SpriteRenderer>();
             rigidBody = GetComponent<Rigidbody2D>();
+            billionList.Add(this);
         }
 
         private void Start() {
@@ -58,25 +62,27 @@ namespace BillionGame {
         private void Update() {
             switch (Team) {
                 case Team.red:
-                    target = getTarget(GameManager.Instance.redFlags);
+                    target = GetTarget(GameManager.Instance.redFlags);
                 break;
                 case Team.blue:
-                    target = getTarget(GameManager.Instance.blueFlags);
+                    target = GetTarget(GameManager.Instance.blueFlags);
                 break;
                 case Team.yellow:
-                    target = getTarget(GameManager.Instance.yellowFlags);
+                    target = GetTarget(GameManager.Instance.yellowFlags);
                 break;
                 case Team.green:
-                    target = getTarget(GameManager.Instance.greenFlags);
+                    target = GetTarget(GameManager.Instance.greenFlags);
                 break;
             }
             if (Input.GetButtonDown("TempDamage") && isOver) { //Temporary damage
                 takeDamage(1);
             }
+            billionTarget = GetBillionTarget();
         }
 
         private void FixedUpdate() {
             moveTowardsTarget(target);
+            AimAngle(billionTarget);
         }
 
         private void OnMouseEnter() {
@@ -92,7 +98,7 @@ namespace BillionGame {
         }
 
 
-        private GameObject getTarget(List<GameObject> flagArray) {
+        private GameObject GetTarget(List<GameObject> flagArray) {
             float smallestDistance = Mathf.Infinity;
             if ( !flagArray.Any() ) {return null;}
             GameObject closestFlag = flagArray[0];
@@ -104,6 +110,37 @@ namespace BillionGame {
                     }
                 }
                 return closestFlag;
+        }
+
+        private Billion GetBillionTarget() {
+            //Find nearest billion that is not on the same team
+            float smallestDistance = Mathf.Infinity;
+            Billion closestBillion = null;
+            foreach (Billion b in billionList) {
+                float distance = Vector2.Distance(transform.position,b.transform.position);
+                if ((distance < smallestDistance) && (b.Team != Team)) {
+                    smallestDistance = distance;
+                    closestBillion = b;
+                }
+            }
+            return closestBillion;
+        }
+
+        private void AimAngle(Billion target) {
+            //used: 
+            //https://answers.unity.com/questions/1350050/how-do-i-rotate-a-2d-object-to-face-another-object.html
+            //Aims at target gameObject
+            if (target != null) {
+                Vector3 targetPos = target.transform.position;
+                targetPos.z = 0;
+                targetPos.x = targetPos.x - transform.position.x;
+                targetPos.y = targetPos.y - transform.position.y;
+                
+                float angle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
+
+                Facing = Quaternion.Euler(new Vector3(0, 0, angle));
+                transform.rotation = Facing;
+            }
         }
         
         private void moveTowardsTarget(GameObject target) {
@@ -138,8 +175,9 @@ namespace BillionGame {
             return healthTransform.localScale;
         }
 
-        private void OnDestroy() {
+        private void OnDisable() {
             originBase.childBillions.Remove(this.gameObject);
+            billionList.Remove(this);
         }
     }
 }
