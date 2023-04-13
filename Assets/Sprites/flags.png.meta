@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -44,10 +44,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -101,185 +101,68 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: flag_yellow_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 72
-        width: 72
-        height: 72
-      alignment: 9
-      pivot: {x: 0.15, y: 0.1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: de173bdc30a135140b1890d985f2f223
-      internalID: 1881737810
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: flag_red_0
-      rect:
-        serializedVersion: 2
-        x: 72
-        y: 72
-        width: 72
-        height: 72
-      alignment: 9
-      pivot: {x: 0.15, y: 0.1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f1bf6a0605e4740459d34a63a4c1a8c4
-      internalID: 2019023232
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: flag_green_0
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 72
-        width: 72
-        height: 72
-      alignment: 9
-      pivot: {x: 0.15, y: 0.1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 98546fa87555f8148b434d77e27f56a2
-      internalID: -486312908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: flag_blue_0
-      rect:
-        serializedVersion: 2
-        x: 216
-        y: 72
-        width: 72
-        height: 72
-      alignment: 9
-      pivot: {x: 0.15, y: 0.1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bcd4c878facbd204bb94985f0413879d
-      internalID: -1473932705
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: flag_yellow_
+      name: flags_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 72
-        height: 72
+        width: 16
+        height: 16
       alignment: 9
-      pivot: {x: 0.15, y: 0.1}
+      pivot: {x: 0.25, y: 0.0625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b547e6aaed801b4db906efae01c87b5
-      internalID: -605708373
+      spriteID: a94933d5b6f647844840282e451fb113
+      internalID: 5307449
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: flag_red_1
+      name: flags_1
       rect:
         serializedVersion: 2
-        x: 72
+        x: 16
         y: 0
-        width: 72
-        height: 72
+        width: 16
+        height: 16
       alignment: 9
-      pivot: {x: 0.15, y: 0.1}
+      pivot: {x: 0.25, y: 0.0625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9058eccea88f6284dbf36fd5168a2b9b
-      internalID: -1177241193
+      spriteID: 6a34d2e6617f8b24282538b2f4a80ed0
+      internalID: -184218723
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: flag_green_1
+      name: flags_2
       rect:
         serializedVersion: 2
-        x: 144
+        x: 32
         y: 0
-        width: 72
-        height: 72
+        width: 16
+        height: 16
       alignment: 9
-      pivot: {x: 0.15, y: 0.1}
+      pivot: {x: 0.25, y: 0.0625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0aa4c049695e6f34e9c0015fa0e9342a
-      internalID: 1072692010
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: flag_blue_1
-      rect:
-        serializedVersion: 2
-        x: 216
-        y: 0
-        width: 72
-        height: 72
-      alignment: 9
-      pivot: {x: 0.15, y: 0.1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4693032885e5a034384c57d79de72719
-      internalID: -1881507702
+      spriteID: 81232395999e959478389c3ed3eeacd9
+      internalID: -2120049889
       vertices: []
       indices: 
       edges: []
@@ -295,14 +178,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      flag_green_0: -486312908
-      flag_blue_1: -1881507702
-      flag_red_1: -1177241193
-      flag_yellow_: -605708373
-      flag_yellow_0: 1881737810
-      flag_green_1: 1072692010
-      flag_blue_0: -1473932705
-      flag_red_0: 2019023232
+      flags_0: 5307449
+      flags_1: -184218723
+      flags_2: -2120049889
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
