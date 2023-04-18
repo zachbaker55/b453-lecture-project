@@ -326,7 +326,7 @@ MonoBehaviour:
   _level: 1
   _maxHealthMultiplier: 2
   _damageMultiplier: 1
-  _shootingRange: 5
+  _shootingRange: 6
   _xpDropAmount: 1
   _moveSpeed: 4.47
   _slowDownSpeed: 0.5

@@ -400,7 +400,7 @@ MonoBehaviour:
   _level: 1
   _maxHealthMultiplier: 5
   _damageMultiplier: 3
-  _shootingRange: 7
+  _shootingRange: 8
   _xpDropAmount: 5
   billionInstance: {fileID: 5822581539828270889, guid: 4974c8a50f8ccb846b85deee3a0fef67, type: 3}
   rotationSpeed: 0.5
