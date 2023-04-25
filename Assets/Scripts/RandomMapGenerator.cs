@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -8,13 +9,13 @@ namespace BillionGame {
     public class RandomMapGenerator : MonoBehaviour {
 
         //Components
-        [SerializeField] private GameObject testObject;
+        [SerializeField] private GameObject baseObject;
         private Tilemap worldGrid;
         private Tilemap blockingGrid;
 
         //Fields
         [SerializeField] private Tile floor;
-        [SerializeField] private Tile wall;
+        [SerializeField] private RuleTile wall;
         [SerializeField] private Vector2Int size;
         [SerializeField] private int wallSpace;
         [SerializeField] private Vector2Int edgeArea;
@@ -45,10 +46,11 @@ namespace BillionGame {
                 for (int y = -size.y-wallSpace; y < size.y+wallSpace; y++) {
                     Vector3Int thisVector = new Vector3Int(x,y,0);
                     bool outerWalls = true;
-                    if ((-size.x <= x) && (x < size.x) && (-size.y <= y) && (y < size.y)) outerWalls = false;
+                    if ((-size.x <= x) && (x < size.x) && (-size.y <= y) && (y < size.y)) {
+                        outerWalls = false;
+                    }
 
                     if ((worldGrid.GetTile<Tile>(thisVector) != floor) || (outerWalls)) {
-                        worldGrid.SetTile(thisVector, wall);
                         blockingGrid.SetTile(thisVector, wall);
                     }
                 }
@@ -56,52 +58,83 @@ namespace BillionGame {
         }
 
         private void GenerateHoles() {
-            Vector2Int leftSpawn = new Vector2Int(Random.Range(-size.x+1,-size.x+edgeArea.x),Random.Range(-size.y+1,size.y));
-            Vector2Int rightSpawn = new Vector2Int(Random.Range(size.x-edgeArea.x,size.x),Random.Range(-size.y+1,size.y)); 
-            Vector2Int upSpawn;
-            while (true) {
-                upSpawn = new Vector2Int(Random.Range(-size.x+1,size.x),Random.Range(size.y-edgeArea.y,size.y));
-                if (Vector2Int.Distance(upSpawn,leftSpawn) >= minBaseDistance &&
-                    Vector2Int.Distance(upSpawn,rightSpawn) >= minBaseDistance) break;
+
+            List<Team> teamList = GameManager.Instance.TeamList;
+            List<Team> shuffledList = teamList.OrderBy( x => Random.value ).ToList();
+            List<Vector2Int> spawnsList = new List<Vector2Int>();
+            int index = 0;
+            foreach (Team team in shuffledList) {
+                Vector2Int spawnPos = new Vector2Int(0,0);
+                while (true) {
+                    if (index == 0) {
+                        spawnPos = new Vector2Int(Random.Range(-size.x+1,-size.x+edgeArea.x),Random.Range(-size.y+1,size.y));
+                    } else if (index == 1) {
+                        spawnPos = new Vector2Int(Random.Range(size.x-edgeArea.x,size.x),Random.Range(-size.y+1,size.y)); 
+                    } else if (index == 2) {
+                        spawnPos = new Vector2Int(Random.Range(-size.x+1,size.x),Random.Range(size.y-edgeArea.y,size.y));
+                    } else if (index == 3) {
+                        spawnPos = new Vector2Int(Random.Range(-size.x+1,size.x),Random.Range(-size.y+1,-size.y+edgeArea.y));
+                    }
+                    //Break out if not in minBaseDistance
+                    bool outOfRange = true;
+                    foreach (Vector2Int otherPos in spawnsList) {
+                        if (Vector2Int.Distance(spawnPos,otherPos) <= minBaseDistance) {
+                            outOfRange = false;
+                        }
+                    }
+                    if (outOfRange) {
+                        break;
+                    }
+                }
+                MakeTunnel(Vector2Int.zero,spawnPos);
+                SpawnHole(spawnPos);
+                GameObject spawnedBase = Instantiate(baseObject, new Vector2(spawnPos.x,spawnPos.y), transform.rotation);
+                BillionBase baseComp = spawnedBase.GetComponent<BillionBase>();
+                baseComp.Team = team.TeamEnum;
+                Vector2 targetPos = Vector2.zero;
+                targetPos.x = targetPos.x - spawnPos.x;
+                targetPos.y = targetPos.y - spawnPos.y;
+                baseComp.SpawnAngle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
+                spawnsList.Add(spawnPos);
+                index++;
             }
-            Vector2Int downSpawn;
-            while (true) {
-                downSpawn = new Vector2Int(Random.Range(-size.x+1,size.x),Random.Range(-size.y+1,-size.y+edgeArea.y));
-                if (Vector2Int.Distance(downSpawn,leftSpawn) >= minBaseDistance &&
-                    Vector2Int.Distance(downSpawn,rightSpawn) >= minBaseDistance) break;
-            }
-
-            SpawnHole(new Vector2Int(0,0));
-            SpawnHole(leftSpawn);
-            SpawnHole(rightSpawn);
-            SpawnHole(upSpawn);
-            SpawnHole(downSpawn);
-
-
-            //Then connect holes from spawns to 0,0
-            //Randomly select which spawn is which team's base
-            //Change team's base spawn angle depending on the side of the arena they spawn
-            //Add dynamic wall tiles? Solidify the games' resolution?
-            
-
-            Instantiate(testObject, new Vector2(leftSpawn.x,leftSpawn.y), transform.rotation);
-            Instantiate(testObject, new Vector2(rightSpawn.x,rightSpawn.y), transform.rotation);
-            Instantiate(testObject, new Vector2(upSpawn.x,upSpawn.y), transform.rotation);
-            Instantiate(testObject, new Vector2(downSpawn.x,downSpawn.y), transform.rotation);
         }
 
+        //Spawns random hole at position
         private Vector2Int SpawnHole(Vector2Int position) {
             Vector2Int holeSize = new Vector2Int(Random.Range(minHoleSize.x,maxHoleSize.x), Random.Range(minHoleSize.y,maxHoleSize.y));
-
             for (int x = position.x-holeSize.x; x < position.x+holeSize.x; x++) {
                 for (int y = position.y-holeSize.y; y < position.y+holeSize.y; y++) {
                     worldGrid.SetTile(new Vector3Int(x,y,0), floor);
                 }
             }
-
-
             return holeSize;
         }
 
+
+        //Makes tunnels between a starting position and an ending position
+        private void MakeTunnel(Vector2Int startingPos, Vector2Int endPos) {
+            Vector2Int holeSize = SpawnHole(startingPos);
+            int horizontalShifted = endPos.x;
+            int verticalShifted = endPos.y;
+
+            if (endPos.x > startingPos.x+holeSize.x) {
+                horizontalShifted = startingPos.x+holeSize.x;
+            } else if (endPos.x < startingPos.x-holeSize.x) {
+                horizontalShifted = startingPos.x-holeSize.x;
+            }
+
+            if (endPos.y > startingPos.y+holeSize.y) {
+                verticalShifted = startingPos.y+holeSize.y;
+            } else if (endPos.y < startingPos.y-holeSize.y) {
+                verticalShifted = startingPos.y-holeSize.y;
+            }
+
+
+            Vector2Int newPos = new Vector2Int(horizontalShifted, verticalShifted);
+            if (newPos != endPos) {
+                MakeTunnel(newPos, endPos);
+            }
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace BillionGame {
         [SerializeField] [Range(0,360)] private float _spawnAngle;
         public float SpawnAngle {
             get { return _spawnAngle; }
-            set { _spawnAngle = Mathf.Clamp(value,0,360); }
+            set { _spawnAngle = value; }
         }
 
         [SerializeField] private int _xpToLevel;

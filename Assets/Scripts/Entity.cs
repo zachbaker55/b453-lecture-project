@@ -121,7 +121,7 @@ namespace BillionGame {
         private void OnEnable() {
         }
 
-        private void OnDisable() {
+        private void OnDestroy() {
             GameManager.Instance.RemoveFromEntityList(_team,this);
             OnEnd();
         }
